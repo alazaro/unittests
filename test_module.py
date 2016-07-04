@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from module import MyClass, Api
 
@@ -15,9 +16,10 @@ class MyClassTestCase(unittest.TestCase):
 
 
 class ApiTestCase(unittest.TestCase):
-    def test_formatted_users(self):
+    @patch('module.Api.get_users_from_db')
+    def test_formatted_users(self, get_users_mock):
+        get_users_mock.return_value = ['John']
         api = Api()
-        api.create_user('John')
         formatted_users = api.get_formatted_users()
         expected_formatted_users = '1: John'
         self.assertEqual(formatted_users, expected_formatted_users)
